@@ -53,6 +53,20 @@ function admin_login_url($url) {
 add_action( 'login_enqueue_scripts', 'admin_login_logo' );
 add_filter( 'login_headerurl', 'admin_login_url' );
 
+/** Remove default image sizes */
+function remove_default_img_sizes( $sizes ) {
+  $targets = ['thumbnail', 'medium', 'medium_large', 'large', '1536x1536', '2048x2048'];
+
+  foreach($sizes as $size_index=>$size) {
+    if(in_array($size, $targets)) {
+      unset($sizes[$size_index]);
+    }
+  }
+
+  return $sizes;
+}
+add_filter( 'intermediate_image_sizes', 'remove_default_img_sizes', 10, 1);
+
 /** Disable wordpress comments */
 // Disable support for comments and trackbacks in post types
 function disable_comments_post_types_support() {
